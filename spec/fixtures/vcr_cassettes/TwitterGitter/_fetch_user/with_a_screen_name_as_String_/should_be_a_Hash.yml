@@ -1,0 +1,96 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.twitter.com/1.1/users/show.json?screen_name=librarycongress
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      User-Agent:
+      - Twitter Ruby Gem 5.7.1
+      Authorization:
+        oauth_version: 100.0x
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - no-cache, no-store, must-revalidate, pre-check=0, post-check=0
+      Content-Encoding:
+      - gzip
+      Content-Length:
+      - '1159'
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Wed, 05 Mar 2014 05:02:59 GMT
+      Expires:
+      - Tue, 31 Mar 1981 05:00:00 GMT
+      Last-Modified:
+      - Wed, 05 Mar 2014 05:02:58 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - tfe
+      Set-Cookie:
+      - guest_id=v1%3A139399577897594821; Domain=.twitter.com; Path=/; Expires=Fri,
+        04-Mar-2016 05:02:59 UTC
+      - lang=en
+      Status:
+      - 200 OK
+      Strict-Transport-Security:
+      - max-age=631138519
+      X-Access-Level:
+      - read
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Rate-Limit-Limit:
+      - '180'
+      X-Rate-Limit-Remaining:
+      - '178'
+      X-Rate-Limit-Reset:
+      - '1393996678'
+      X-Transaction:
+      - 3a5ef83e1c5a010d
+      X-Xss-Protection:
+      - 1; mode=block
+    body:
+      encoding: ASCII-8BIT
+      string: !binary |-
+        H4sIAAAAAAAAAKxW227bOBD9FUIPiy7Wa8uyLrbfEjfpNtl9aoqiqAOBkiiJ
+        G4pUSSqqG/jfd6ibLTtBGmCTB5MzZ4acmTNDPVk0sdbB3HO8wJnAJlRaWmur
+        k1gTi+OCgOBvGkksd0ikaCN4JolSoFSxJISHHYa1mPigZyLGmgoOyi9Y5ZRn
+        WvAJer8BXULAmpa9miAsCdI5QQzLjCiNOneI8kZcC8mSCaqpzlFBGQM7Za4T
+        CfGgJkiSWMgEToB1mQstMonLHDYFLhXCPIEFr9ojlfEpKoliwRiJzRXUFK5U
+        SQZXybUu19vZdqansdjOLj9+vwts+dXmgCBcU02JstZPLbr5ge23p1+x/lHC
+        RUgSnkDrup5CqqaZeDSJoapkeNeBDnLKExqbo7/ZE8e539/vT5I43OV+D6pS
+        Cg2xEahvipkiEyuFaEVNpApjUXFtrT3fX86h7KmkhCeDOIDCUQWWvWDesgOK
+        jY0Ug8i6lhTdVBw5KzR3185i7XjoDxv+kGPbAVw3xY+QYqrJ4NeFDOs4FGmq
+        CGz/nC8BPrE0LUj4U3BDoSsM50qO7kCG3n3+hH5DG8xxgn8HjxkRIeE4Ykcx
+        PRJJU2oEWlawVxrrSh3O9LwV3JxhnoF3YorQIky2RvHcVQT9gyWyXQhgbftr
+        Nxjimbsm/XCG69ord+66rr/0bXduL5dHPXOuBCtNfjTegcB3uSiwQjckTaEG
+        gqPLijLDWARrjBQX9Q4leDedTtEJi75c3vJbmn+6rUwAkNbYJKsmkTlBVjzG
+        x3WmPJSkZLtQi7CNNjSX5xVjLyjbCM4BkEn5gm2neslyNBlaNZSvX8ai6VW4
+        tepFQPmYHPRcSxpVWsgBIImuCdF9Yf1FSzHDsEHmjDs0h5mjcda0BORtV0SC
+        dZu+U2BlAimMGUyBVlSQhOKmp8dFX9nOwlusnGeL3itHneouJ4Hdezxt+zJS
+        U13TIoMaF9tZg4GJkfs3/ocPm88XFx/Dv7zpv2VmHTkIjbnq3Kg3+3l2SI3o
+        NR4/JY2Nbw1d2XofYV8aaCOLk2dhO2tpt52dNwzEYkb3djY3xN6VhuWNxNCe
+        /myr2rwPZlHDZLIdmCo5lH65MBQxILBJqbZgBKoCM9YhF67dAB0nOAfqvCqi
+        3qXXApvfARhLURqkSW5VdFDfbqGubZ/63DfjuSfooTc7Fh9JSqEUjaBrFOEK
+        qPtIBtVhbO3HPXE2BqkKtcRcMQzq56RA7jMjeCFSykgY4fghk9BCZuAzY2+t
+        Lq7cKzO/nsHQAmfkFS6/ZGaqbjur1WKxnUWtYprR9JWDXuf8/3Kehv1Zct4S
+        bX9ksFg4gR04wH2RiZALCUTsGvDM768H9xb3EeYc5trh3q+kzaCN6/a7Dxpw
+        4XmBv/Qc58gpo/xhoIh5G6+vj7SKJiTCMoxgtsPRPW7jXdnX82dwsGED6uq9
+        +T9CmYdz0Pob/8K/ONLC0D6rdf8JkJAUV0yHHXao6Im8Nxp9HFHTcCMJPGnf
+        K/gcNe2pBx0XGj472o9b1Un3/wEAAP//AwAY0kyzTQsAAA==
+    http_version: 
+  recorded_at: Wed, 05 Mar 2014 05:03:42 GMT
+recorded_with: VCR 2.8.0

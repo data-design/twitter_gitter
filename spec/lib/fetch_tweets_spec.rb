@@ -36,16 +36,17 @@ describe TwitterGitter do
         it 'should allow attributes to be overridden' do
           subject.fetch_tweets('guy', count: 10, trim_user: false, since_id: 909 ){}
           expect(client).to have_received(:user_timeline).with(
-            hash_including(:since_id => 909, count: 10, trim_user: false)
+            # since_id is always incremented
+            hash_including(:since_id => 910, count: 10, trim_user: false)
           )
         end
 
         describe '#fetch_tweets_since variation' do
           it 'should allow for second argument to be Fixnum representing :since_id' do
             subject.fetch_tweets_since('guy', 777){ }
-           
+            # since_id is always incremented
             expect(client).to have_received(:user_timeline).with(
-              hash_including(since_id: 777)
+              hash_including(since_id: 778)
             )
           end
         end        
@@ -56,27 +57,31 @@ describe TwitterGitter do
 
 
     # need to set up better fixtures
-    describe 'end-to-end', skip: true do
+    describe 'end-to-end', vcr: true do
       subject{ TwitterGitter.new }
       let(:screen_name){ 'WhiteHouse' } # assuming account as 3200+ tweets
 
       context 'entire batch' do
-        it 'should fetch close to 3,200 tweets' do
+        it 'should fetch close to 3,200 tweets', vcr: true do
           arr = []
           subject.fetch_tweets(screen_name) do |tweet|
             arr << tweet
           end
 
           expect(arr.size).to be_within(200).of(3200)
+          # should be no duplicate ids
+          expect(arr.map{|a| a[:id] }.uniq.size  ).to eq arr.size
+
           # tweets collected in chronological order
-          expect(arr.first['created_at']).to be > arr.last['created_at']
+          expect(Time.parse( arr.first[:created_at] ) ).to be > Time.parse( arr.last[:created_at])
         end
       end
 
       context 'using #fetch_tweets_since' do
         let(:since_id){ 436880744007233536 }
         # note, this test could quickly go out of date...
-        it 'should be a limited batch' do 
+        it 'should be a limited batch', vcr: true do
+          arr = []
           subject.fetch_tweets_since(screen_name, since_id) do |tweet|
             arr << tweet
           end

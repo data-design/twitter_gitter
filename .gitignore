@@ -17,4 +17,3 @@ test/version_tmp
 tmp
 .DS_Store
 .twitter_creds
-spec/fixtures/vcr_cassettes

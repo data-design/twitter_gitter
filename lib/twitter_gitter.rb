@@ -4,22 +4,28 @@ require "twitter_gitter/version"
 require 'twitter'
 require 'hashie'
 require 'yaml'
-# To give objects the :class_attribute convenience
-# require 'active_support/core_ext/class'
 
 class TwitterGitter
+
+# Set the convention that ENV['TWITTER_CREDS'] points to a YAML filename
   DEFAULT_KEY_FILE = ENV['TWITTER_CREDS']
 
+# Set default parameters for a catch-all for what's publicly available on
+# any given user's timeline, according to Twitter docs:
+# https://dev.twitter.com/docs/api/1.1/get/statuses/user_timeline
   MAX_BATCH_SIZE_USERS = 100
   MAX_BATCH_SIZE_TWEETS = 200
   BASIC_TIMELINE_OPTS = { 
+# We don't need to save the user object, since presumably we know who the user is    
     trim_user: true, 
     include_rts: true,
-    since_id: 1,
+    since_id: 0,
     count: MAX_BATCH_SIZE_TWEETS
   }
 
 
+# Kind of a holdover, but give the user the option of just accessing the client object directly.
+# It at least makes it easier to prototype new things
   attr_reader :client
 
   def initialize(key=DEFAULT_KEY_FILE)
@@ -43,17 +49,23 @@ class TwitterGitter
 
   def fetch_tweets(uid, opts = BASIC_TIMELINE_OPTS, &blk)
     opts = Hashie::Mash.new(opts)
+    # prevent repeat fetches
+    opts[:since_id] += 1 unless opts[:since_id].nil?
+    opts[:max_id] -= 1 unless opts[:max_id].nil?
+ 
     opts.merge!( get_identity_hash uid )
-
+    last_tweet = nil
     loop do 
       last_tweet = fetch :user_timeline, opts do |tweet|
         yield tweet
       end
 
       break if last_tweet.nil?
-      # add a :max_id constraint
-      opts.merge!(:max_id => last_tweet[:id])
+      # add a :max_id constraint, minus 1
+      opts.merge!(:max_id => (last_tweet[:id] - 1))
     end
+
+    return last_tweet
   end
 
   def fetch_tweets_since(uid, since_id, opts = BASIC_TIMELINE_OPTS, &blk)
@@ -68,6 +80,7 @@ class TwitterGitter
       begin
         results = @client.send(*args)
       rescue => err
+        binding.pry
         raise err
         # x = get_rate_limit_seconds(err)
         # if x.is_a?(Fixnum)
