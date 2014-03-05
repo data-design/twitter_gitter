@@ -62,14 +62,15 @@ class TwitterGitter
       begin
         results = @client.send(*args)
       rescue => err
-        x = get_rate_limit_seconds(err)
-        if x.is_a?(Fixnum)
-          puts "#{Time.now}: Sleeping for #{x} seconds"
-          sleep x
-          retry
-        else
-          raise err
-        end
+        raise err
+        # x = get_rate_limit_seconds(err)
+        # if x.is_a?(Fixnum)
+        #   puts "#{Time.now}: Sleeping for #{x} seconds"
+        #   sleep x
+        #   retry
+        # else
+        #   raise err
+        # end
       else
         arr = Array(results).map do |r|
           # convert each Twitter::Object into a Hash

@@ -51,11 +51,10 @@ describe TwitterGitter do
       let(:screen_names_101){ Array(1..101).map(&:to_s) }
 
       it 'should call the :fetch routine twice' do
-        client = Twitter::REST::Client.new
-        client.stub(:users){ [] }
 
-        gitter = TwitterGitter.new(client)
-        gitter.fetch_users(screen_names_101){}
+        client = Twitter::REST::Client.new
+        allow(client).to receive(:users).with(a_kind_of(Array)){ [] }
+        TwitterGitter.new(client).fetch_users(screen_names_101){}
 
         expect(client).to have_received(:users).twice.with(Array)
       end
