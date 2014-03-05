@@ -27,22 +27,40 @@ describe TwitterGitter do
     describe 'yield and return value', vcr: true do      
       let(:screen_names){['ev', 'twitter']}
 
-      it 'should yield for each screen_name found' do
-        expect{ |b| subject.fetch_users(screen_names, &b) 
-          }.to yield_control.exactly(screen_names.length).times
+      context 'when block is given' do
+        it 'should yield for each screen_name found' do
+          expect{ |b| subject.fetch_users(screen_names, &b) 
+            }.to yield_control.exactly(screen_names.length).times
+        end
+
+        it 'should yield a Hash each time' do
+          expect{ |b| subject.fetch_users(screen_names, &b) }.to yield_successive_args(Hash, Hash)
+        end
+
+        describe 'return value' do
+          let(:status){ subject.fetch_users(screen_names){ 'empty block' } }
+      
+          it 'last result is a Hash' do
+            expect(status.last_result[:screen_name]).to eq screen_names.last
+          end
+
+          it 'has counted 2 results' do
+            expect(status.results_count).to eq screen_names.count
+          end 
+        end
       end
 
-      it 'should yield a Hash each time' do
-        expect{ |b| subject.fetch_users(screen_names, &b) }.to yield_successive_args(Hash, Hash)
+      context 'no block is given' do
+        describe 'return value' do
+          let(:status){ subject.fetch_users(screen_names) }
+
+          it 'should return results Array' do
+            expect(status.results.count).to eq status.results_count
+            expect(status.results.all?{|r| r.is_a?(Hash)})
+          end
+        end
       end
 
-      it 'should return the last member as a Hash' do
-        expect(subject.fetch_users(screen_names){}[:screen_name]).to eq screen_names.last
-      end 
-
-      it 'should raise an error if no block given' do
-        expect{ subject.fetch_users(screen_names) }.to raise_error LocalJumpError
-      end
     end  
 
 
@@ -53,8 +71,8 @@ describe TwitterGitter do
       it 'should call the :fetch routine twice' do
 
         client = Twitter::REST::Client.new
-        allow(client).to receive(:users).with(a_kind_of(Array)){ [] }
-        TwitterGitter.new(client).fetch_users(screen_names_101){}
+        allow(client).to receive(:users).with(a_kind_of(Array)){  }
+        TwitterGitter.new(client).fetch_users(screen_names_101){ }
 
         expect(client).to have_received(:users).twice.with(Array)
       end

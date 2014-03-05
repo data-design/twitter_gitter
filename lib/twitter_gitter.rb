@@ -32,19 +32,20 @@ class TwitterGitter
     @client = TwitterGitter.initialize_client(key)
   end
 
+  # convenience method, just returns the single user
   def fetch_user(id)
-    fetch( :user, id ){ }
+    fetch( :user, id ).last_result
   end
 
   def fetch_users(ids, &blk)
     ids = Array(ids)
-    last_user = nil
+    status = nil
 
     ids.each_slice(MAX_BATCH_SIZE_USERS) do |arr|
-      last_user = fetch :users, arr, &blk
+      status = fetch status, :users, arr, &blk
     end
 
-    return last_user
+    return status
   end
 
   def fetch_tweets(uid, opts = BASIC_TIMELINE_OPTS, &blk)
@@ -52,20 +53,18 @@ class TwitterGitter
     # prevent repeat fetches
     opts[:since_id] += 1 unless opts[:since_id].nil?
     opts[:max_id] -= 1 unless opts[:max_id].nil?
- 
     opts.merge!( get_identity_hash uid )
-    last_tweet = nil
-    loop do 
-      last_tweet = fetch :user_timeline, opts do |tweet|
-        yield tweet
-      end
+    status = nil
 
+    loop do
+      status = fetch status, :user_timeline, opts, &blk
+      last_tweet = status.last_result
       break if last_tweet.nil?
       # add a :max_id constraint, minus 1
       opts.merge!(:max_id => (last_tweet[:id] - 1))
     end
 
-    return last_tweet
+    return status
   end
 
   def fetch_tweets_since(uid, since_id, opts = BASIC_TIMELINE_OPTS, &blk)
@@ -77,11 +76,33 @@ class TwitterGitter
 
   private 
     def fetch(*args)
+      first_arg = args.shift
+      # this is UGLY
+      if first_arg.is_a?(Symbol) || first_arg.is_a?(String)
+      # first arg is something like :user_timeline
+        client_foo_name = first_arg
+        status_info = init_info_structure
+      elsif first_arg.nil? || first_arg.empty?
+      # an empty object or nil is being sent in
+        status_info = init_info_structure # yuck, not DRY
+        client_foo_name = args.shift
+      else 
+      # status_hash has been resubmitted
+        status_info = first_arg
+        client_foo_name = args.shift
+      end
+      
+      # collect the results into an Array if no block was given
+      status_info[:results] ||= [] unless block_given?
+
       begin
-        results = @client.send(*args)
+        results = @client.send(client_foo_name, *args)
       rescue => err
-        binding.pry
         raise err
+ 
+        # binding.pry
+        # status_info[:error_count] += 1
+        
         # x = get_rate_limit_seconds(err)
         # if x.is_a?(Fixnum)
         #   puts "#{Time.now}: Sleeping for #{x} seconds"
@@ -92,17 +113,29 @@ class TwitterGitter
         # end
       else
         arr = Array(results).map do |r|
+          # increment the info_hash count
+          status_info.results_count += 1
           # convert each Twitter::Object into a Hash
           h = r.to_h
-          # yield it to the caller
-          yield h
+          
+          # if a block is given, yield it
+          if block_given?
+            yield h
+          else
+            status_info[:results] << h
+          end
 
-          h
-        end
-        # At the end of the fetching, returning the last element,
-        # even if it is nil
-        return arr.last
+          status_info.last_result = h
+        end         
+
+        return status_info
+
       end
+    end
+
+
+    def init_info_structure
+      Hashie::Mash.new(start_time: Time.now, end_time: nil, error_count: 0, results_count: 0, last_result: nil)
     end
 
 
