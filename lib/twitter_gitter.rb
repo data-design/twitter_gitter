@@ -56,6 +56,12 @@ class TwitterGitter
     end
   end
 
+  def fetch_tweets_since(uid, since_id, opts = BASIC_TIMELINE_OPTS, &blk)
+    new_opts = Hashie::Mash.new(opts)
+    new_opts.merge!(since_id: since_id)
+
+    fetch_tweets(uid, new_opts, &blk)
+  end
 
   private 
     def fetch(*args)
