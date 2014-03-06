@@ -1,0 +1,97 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.twitter.com/1.1/users/show.json?screen_name=WhiteHouse
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      User-Agent:
+      - Twitter Ruby Gem 5.7.1
+      Authorization:
+        oauth_version: 100.0x
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - no-cache, no-store, must-revalidate, pre-check=0, post-check=0
+      Content-Encoding:
+      - gzip
+      Content-Length:
+      - '1202'
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Thu, 06 Mar 2014 04:02:53 GMT
+      Expires:
+      - Tue, 31 Mar 1981 05:00:00 GMT
+      Last-Modified:
+      - Thu, 06 Mar 2014 04:02:53 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - tfe
+      Set-Cookie:
+      - guest_id=v1%3A139407857345939615; Domain=.twitter.com; Path=/; Expires=Sat,
+        05-Mar-2016 04:02:53 UTC
+      - lang=en
+      Status:
+      - 200 OK
+      Strict-Transport-Security:
+      - max-age=631138519
+      X-Access-Level:
+      - read
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Rate-Limit-Limit:
+      - '180'
+      X-Rate-Limit-Remaining:
+      - '179'
+      X-Rate-Limit-Reset:
+      - '1394079473'
+      X-Transaction:
+      - f29533567bc41f30
+      X-Xss-Protection:
+      - 1; mode=block
+    body:
+      encoding: ASCII-8BIT
+      string: !binary |-
+        H4sIAAAAAAAAAMRW227jNhD9FUIPixZ1bd19KfqwzQXbAukWXW+36CoQKGlk
+        cSORKknZyQb59w4lW/Itm7ZAUb0knAt5eGbOmI8Wy6yFZ3uON3eDEa5ipaW1
+        sHYma2RxWgFalgWQDwXTQN6IRgE6VCoBeLz1t76dqxQp1UxwY6eqYHylBR+R
+        ywv0ZYCJrN66r0VZig3JhSQaTyipBqVJLkVFfpGgWAZck7cJrSihPCMFU4Rm
+        FeMMcbZHjMlyA6BVl2P2GPKoBKLYikNGosa1HS8RfXhFH0gCGJIWbA3ZghRa
+        14toEk30OBXR5I/78Pp+c1d/ZmME3cgSwR6FuFVTvd3cLJXACDyPaQbKWjx2
+        0e0fXH58/DvZ9zVeD7L4KHRjWC0Mq+OVWBv2mKpL+rCNO3EznrHUgPhoj1z3
+        9un26Yjwl1AN1/4iKnNcNKklW9P04QysY/+Ay/G8kRMEBhpiq6XQkGrALsxp
+        qWBk5W1DgFRxKhqurYUfutO57aBHMuBZb3dmaCuxDxDf1hRMgzAcWdiX1Fip
+        Ng0mGXldS+LYxHUWjo3dTr6x8SOubc8RWk7XopHIY7+zjfXWaSzyXAEuv3Vm
+        GD6yNKsg/iy46fYriudKTpZoI1+9f0dekQvKaUa/xh1XIGLgNCn3rrUGyXJm
+        DFo2uFaaaizbcBvPMQIsKV/h9sCtXYgp2cGFlkVDbqgkdkhsd2HbC9/rL+T4
+        hms8xPeNfJE2f+p7Uy9E0gdxnzoxS8O92T2yblhaQFlCq7cfySfBOEGCSA6t
+        Ui8KiZwzyhVBh9Hbe47kZeSdNtolr2hVf4eywmtlrXsjZJmZ2IrKO5wE5LUq
+        yAfIOKiMPowjq9Om34r8RIb1z8Gvb35a/q5/M4wgjtTQHzW27aWUFBLy76O2
+        MVWbRBPR6LHeMI3lwQ0q04Qia1KtcEej/AzSOzxTQomJXHTtFnU7QjsbLk1E
+        ewDu19kNP7LhKd3vVMZjCXX5EGsRd7WKDfW8KctnnB3/pwHYCPKZ3K3rucyD
+        Gdy5sft2/6ZCyIxxU5edCVWawuDnWrKk0UL2ARJamoa+9DuJGIX0xsA/HHgF
+        DnlNV0bft1imhyoR5Xbx5XFzUN7nxs1KjHcTZb3O3PXyZOCci9gbOa47cnwf
+        Rw7CMXxWBrvgLcKn4XpDabck7FlqoRRLkHQFXOG919C7Bs0+HVJ6MgSYivFX
+        iyv8lRPynBVBDUndoMD2zVkJcULTu1WrKqxCadKtS/vi+uIH62wMq+gKjoms
+        E2W0Ua16ZZxNQ6l405kZevjhqHBsN/Siydx3Q8cO597cnrk0hNncC/LUc3II
+        IM88Z/yphtULaOJWqltM6v8FpXF9zPI/oe0EVmjPAycIfT+a2O4082fUc5zU
+        henUhnA69akb+vPUDhI/j7mQFS2P0f0Lnv4DFAnlHFUysPBCoUy0QbB9M0YT
+        x1TDw0pM93YtGb/rW9fzwnA+3/OaF1tCZZzgxMKzd3HX7XcmDhdlH3XlXM2u
+        rvaizI9Z7w3bb8+LM+CkvXaNkEFOm1LH29hepEf2XdLBo4WZOXBgwUH9Z4MP
+        WjM1dO/jQuNboHshq6316S8AAAD//wMAEVwLgosLAAA=
+    http_version: 
+  recorded_at: Thu, 06 Mar 2014 04:02:57 GMT
+recorded_with: VCR 2.8.0
