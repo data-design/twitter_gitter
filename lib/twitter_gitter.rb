@@ -34,18 +34,18 @@ class TwitterGitter
 
   # convenience method, just returns the single user
   def fetch_user(id)
-    fetch( :user, id ).last_result
+    fetch( :user, id ).last_result_item
   end
 
   def fetch_users(ids, &blk)
     ids = Array(ids)
-    status = nil
+    job = nil
 
     ids.each_slice(MAX_BATCH_SIZE_USERS) do |arr|
-      status = fetch status, :users, arr, &blk
+      job = fetch job, :users, arr, &blk
     end
 
-    return status
+    return job
   end
 
   def fetch_tweets(uid, opts = BASIC_TIMELINE_OPTS, &blk)
@@ -54,17 +54,18 @@ class TwitterGitter
     opts[:since_id] += 1 unless opts[:since_id].nil?
     opts[:max_id] -= 1 unless opts[:max_id].nil?
     opts.merge!( get_identity_hash uid )
-    status = nil
+    
+    job = nil # purely for declarative purposes
 
     loop do
-      status = fetch status, :user_timeline, opts, &blk
-      last_tweet = status.last_result
+      job = fetch job, :user_timeline, opts, &blk
+      last_tweet = job.last_result_item
       break if last_tweet.nil?
       # add a :max_id constraint, minus 1
       opts.merge!(:max_id => (last_tweet[:id] - 1))
     end
 
-    return status
+    return job
   end
 
   def fetch_tweets_since(uid, since_id, opts = BASIC_TIMELINE_OPTS, &blk)
@@ -81,19 +82,16 @@ class TwitterGitter
       if first_arg.is_a?(Symbol) || first_arg.is_a?(String)
       # first arg is something like :user_timeline
         client_foo_name = first_arg
-        status_info = init_info_structure
-      elsif first_arg.nil? || first_arg.empty?
-      # an empty object or nil is being sent in
-        status_info = init_info_structure # yuck, not DRY
-        client_foo_name = args.shift
+        job = init_job
       else 
-      # status_hash has been resubmitted
-        status_info = first_arg
+      # an empty object or nil is being sent in, or a real job_hash
+      # but let init_job handle it
         client_foo_name = args.shift
+        job = init_job(first_arg)      
       end
-      
+          
       # collect the results into an Array if no block was given
-      status_info[:results] ||= [] unless block_given?
+      job.results ||= [] unless block_given?
 
       begin
         results = @client.send(client_foo_name, *args)
@@ -114,7 +112,7 @@ class TwitterGitter
       else
         arr = Array(results).map do |r|
           # increment the info_hash count
-          status_info.results_count += 1
+          job.results_count += 1
           # convert each Twitter::Object into a Hash
           h = r.to_h
           
@@ -122,20 +120,24 @@ class TwitterGitter
           if block_given?
             yield h
           else
-            status_info[:results] << h
+            job.results << h
           end
-
-          status_info.last_result = h
+          # last_result_item is always nil until it is reassigned
+          job.last_result_item = h          
         end         
+        job.end_time = Time.now
 
-        return status_info
-
+        return job
       end
     end
 
 
-    def init_info_structure
-      Hashie::Mash.new(start_time: Time.now, end_time: nil, error_count: 0, results_count: 0, last_result: nil)
+    def init_job(job=nil)
+      job ||= Hashie::Mash.new(start_time: Time.now, end_time: nil, error_count: 0, results_count: 0)
+      # reset last_result_item
+      job[:last_result_item] = nil      
+
+      return job
     end
 
 

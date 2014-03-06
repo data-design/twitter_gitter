@@ -15,7 +15,7 @@ describe TwitterGitter do
       context 'differentiating between user_id and screen_name' do
         it 'should interpret Fixnum as :user_id' do
           subject.fetch_tweets(42)
-          expect(client).to have_received(:user_timeline).with(hash_including(:user_id => 42))
+          expect(client).to have_received(:user_timeline).with(hash_including( :user_id => 42 ))
         end
 
         it 'should interpret String as :screen_name' do
@@ -56,41 +56,7 @@ describe TwitterGitter do
   
 
 
-    # need to set up better fixtures
-    describe 'end-to-end', vcr: true do
-      subject{ TwitterGitter.new }
-      let(:screen_name){ 'WhiteHouse' } # assuming account as 3200+ tweets
 
-      context 'entire batch', vcr: true do
-        it 'should fetch close to 3,200 tweets' do
-          arr = []
-          subject.fetch_tweets(screen_name) do |tweet|
-            arr << tweet
-          end
-
-          expect(arr.size).to be_within(200).of(3200)
-          # should be no duplicate ids
-          expect(arr.map{|a| a[:id] }.uniq.size  ).to eq arr.size
-
-          # tweets collected in chronological order
-          expect(Time.parse( arr.first[:created_at] ) ).to be > Time.parse( arr.last[:created_at])
-        end
-
-        it 'should return giant results array without block' do
-          status = subject.fetch_tweets(screen_name)
-          expect(status.results.count).to eq status.results_count
-        end
-      end
-
-      context 'using #fetch_tweets_since' do
-        let(:since_id){ 436880744007233536 }
-        # note, this test could quickly go out of date...
-        it 'should be a limited batch', vcr: true do
-          status = subject.fetch_tweets_since(screen_name, since_id)
-          expect(status.results_count).to be < 2000
-        end
-      end
-    end
 
   end
 end

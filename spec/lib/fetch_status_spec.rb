@@ -18,5 +18,4 @@ describe TwitterGitter do
 
     end
 
-  end
 end

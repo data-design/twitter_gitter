@@ -28,7 +28,6 @@ describe TwitterGitter do
       end
 
       describe '.initialize_client' do
-
         it 'should return a Twitter::REST::Client' do
           expect(TwitterGitter.initialize_client).to be_a Twitter::REST::Client
         end
